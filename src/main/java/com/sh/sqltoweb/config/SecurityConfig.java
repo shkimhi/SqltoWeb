@@ -2,9 +2,12 @@ package com.sh.sqltoweb.config;
 
 import com.sh.sqltoweb.jwt.JwtAuthenticationFilter;
 import com.sh.sqltoweb.jwt.JwtAuthorizationFilter;
+import com.sh.sqltoweb.jwt.JwtProvider;
 import com.sh.sqltoweb.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final CorsFilter corsFilter;
     private final UserRepository userRepository;
-
+    private final JwtProvider jwtProvider;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -28,8 +31,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(corsFilter)
                 .formLogin().disable()
                 .httpBasic().disable()
-                .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(),userRepository))
+                .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtProvider))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(),userRepository, jwtProvider))
                 .authorizeRequests()
                 .antMatchers("/api/v1/**")
                 .access("hasRole('ROLE_USER') or hasRole('ROLE_MANAGER') or hasRole('ROLE_ADMIN')")

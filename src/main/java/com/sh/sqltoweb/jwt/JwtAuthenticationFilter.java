@@ -8,11 +8,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sh.sqltoweb.auth.PrincipalDetails;
 import com.sh.sqltoweb.dto.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -25,6 +27,8 @@ import java.util.Date;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtProvider jwtProvider;
+
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -51,12 +55,12 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         PrincipalDetails principalDetails = (PrincipalDetails) authResult.getPrincipal();
 
         String jwtToken = JWT.create()
-                .withSubject("SEOK")
-                .withExpiresAt(new Date(System.currentTimeMillis()+(60000*10)))
+                .withSubject(principalDetails.getUsername())
+                .withExpiresAt(new Date(System.currentTimeMillis()+(60000*1000)))
                 .withClaim("id", principalDetails.getUser().getId())
                 .withClaim("username",principalDetails.getUser().getUsername())
-                .sign(Algorithm.HMAC512("SEOK"));
+                .sign(Algorithm.HMAC512(jwtProvider.getSecret()));
 
-        response.addHeader("Authorization", "Bearer "+jwtToken);
+        response.addHeader(jwtProvider.getHeaderString(), jwtProvider.getTokenPrefix()+jwtToken);
     }
 }

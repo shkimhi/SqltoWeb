@@ -10,12 +10,12 @@ import java.util.List;
 public class ChatCompletionDto {
 
     private String model;
-    private List<ChatRequestMsgDto> message;
+    private List<ChatRequestMsgDto> messages;
 
     @Builder
-    public ChatCompletionDto(String model, List<ChatRequestMsgDto> message){
+    public ChatCompletionDto(String model, List<ChatRequestMsgDto> messages){
         this.model = model;
-        this.message = message;
+        this.messages = messages;
     }
 
 }

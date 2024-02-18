@@ -51,6 +51,7 @@ public class ChatGPTController {
     @PostMapping("/prompt")
     public ResponseEntity<Map<String, Object>> selectPrompt(@RequestBody ChatCompletionDto chatCompletionDto) {
         log.debug("param :: " + chatCompletionDto.toString());
+
         Map<String, Object> result = chatGPTService.prompt(chatCompletionDto);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }

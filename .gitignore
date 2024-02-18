@@ -18,6 +18,8 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+JwtProvider
+src/main/java/com/sh/sqltoweb/jwt/JwtProvider.java
 application.properties
 .idea
 *.iws
