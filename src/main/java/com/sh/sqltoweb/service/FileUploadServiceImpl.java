@@ -54,12 +54,8 @@ public class FileUploadServiceImpl implements FileUploadService{
 
     private void executeSQL(File file, String userId) {
         try {
-            // SQL 스크립트 파일을 읽습니다.
             List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
-
-            // SQL 구문이 아닌 부분을 제거합니다.
             lines.removeIf(line -> line.startsWith("--") || line.startsWith("/*"));
-
             String sqlScript = String.join("\n", lines);
 
             jdbcTemplate.execute("USE " + userId);
