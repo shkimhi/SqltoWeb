@@ -56,12 +56,12 @@ public class FileUploadServiceImpl implements FileUploadService{
         try {
             List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
             lines.removeIf(line -> line.startsWith("--") || line.startsWith("/*"));
-/*
+
             String sqlScript = String.join("\n", lines);
 
             jdbcTemplate.execute("USE " + userId);
             jdbcTemplate.execute(sqlScript);
-*/
+
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -21,6 +21,12 @@ public class UploadController {
         this.fileUploadService = fileUploadService;
     }
 
+    /**
+     * [API] sql 파일을 업로드 받아 DB에 스키마 및 데이터를 생성합니다.
+     *
+     * @param file
+     * @return
+     */
     @PostMapping("/upload")
     public ResponseEntity<Void> uploadSqlFile(@RequestParam("file")MultipartFile file){
         fileUploadService.saveFile(file);

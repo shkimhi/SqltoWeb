@@ -5,7 +5,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sh.sqltoweb.config.ChatGPTConfig;
+import com.sh.sqltoweb.config.prompt;
 import com.sh.sqltoweb.dto.ChatCompletionDto;
+import com.sh.sqltoweb.dto.ChatRequestMsgDto;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -14,6 +16,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -114,12 +117,36 @@ public class ChatGPTServiceImpl implements ChatGPTService{
     /**
      * 신규 모델에 대한 프롬프트
      *
-     * @param chatCompletionDto {}
+     * @param userQuery {}
      * @return chatCompletionDto
      */
     @Override
-    public Map<String, Object> prompt(ChatCompletionDto chatCompletionDto) {
+    public Map<String, Object> prompt(String userQuery) {
         log.debug("[+] 신규 프롬프트를 수행합니다.");
+
+
+        String dbSchemaInfo = "";
+
+        String systemPrompt = prompt.SYSTEM_PROMPT.getText();
+        String userPrompt = prompt.USER_PROMPT.formatText(dbSchemaInfo, userQuery);
+
+        ChatRequestMsgDto system = ChatRequestMsgDto.builder()
+                .role("system")
+                .content(systemPrompt)
+                .build();
+        ChatRequestMsgDto user = ChatRequestMsgDto.builder()
+                .role("user")
+                .content(userPrompt)
+                .build();
+
+        List<ChatRequestMsgDto> messages = new ArrayList<>();
+        messages.add(system);
+        messages.add(user);
+
+        ChatCompletionDto chatCompletionDto = ChatCompletionDto.builder()
+                .model("GPT-3.5")
+                .messages(messages)
+                .build();
 
         Map<String, Object> resultMap = new HashMap<>();
 

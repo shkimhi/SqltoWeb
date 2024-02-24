@@ -2,6 +2,7 @@ package com.sh.sqltoweb.controller;
 
 
 import com.sh.sqltoweb.dto.ChatCompletionDto;
+import com.sh.sqltoweb.dto.ChatRequestMsgDto;
 import com.sh.sqltoweb.service.ChatGPTServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -45,14 +46,14 @@ public class ChatGPTController {
     /**
      * [API] 최신 ChatGPT 프롬프트 명령어를 수행합니다. : gpt-4, gpt-4 turbo, gpt-3.5-turbo
      *
-     * @param chatCompletionDto
+     * @param userQuery
      * @return
      */
     @PostMapping("/prompt")
-    public ResponseEntity<Map<String, Object>> selectPrompt(@RequestBody ChatCompletionDto chatCompletionDto) {
-        log.debug("param :: " + chatCompletionDto.toString());
+    public ResponseEntity<Map<String, Object>> selectPrompt(@RequestBody String userQuery) {
+        log.debug("param :: " + userQuery);
 
-        Map<String, Object> result = chatGPTService.prompt(chatCompletionDto);
+        Map<String, Object> result = chatGPTService.prompt(userQuery);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 

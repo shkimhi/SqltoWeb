@@ -3,7 +3,7 @@ package com.sh.sqltoweb.dto;
 
 import lombok.*;
 
-@Getter
+@Data
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatRequestMsgDto {

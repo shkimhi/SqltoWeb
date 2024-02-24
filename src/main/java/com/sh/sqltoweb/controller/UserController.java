@@ -17,6 +17,12 @@ public class UserController {
     @Autowired
     UserRepository userRepository;
 
+    /**
+     * [API] ID,PW 를 입력받아 회원가입을 진행합니다.
+     *
+     * @param user
+     * @return
+     */
     @PostMapping("/join")
     public String join(@RequestBody User user){
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));

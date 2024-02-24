@@ -18,7 +18,4 @@ public class JwtProvider {
 
     @Value("${jwt.tokenprefix}")
     private String TokenPrefix;
-
-
-
 }
