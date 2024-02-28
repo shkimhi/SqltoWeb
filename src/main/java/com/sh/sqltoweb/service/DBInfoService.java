@@ -29,9 +29,7 @@ public class DBInfoService {
                     for(int i =1; i<=columnCount; i++){
                         result.append(metaData.getColumnLabel(i)).append(": ").append(resultSet.getObject(i)).append(", ");
                     }
-/*
                     result.append("\n");
-*/
                 }
                 connection.close();
                 return result.toString();
