@@ -3,6 +3,8 @@ package com.sh.sqltoweb.service;
 import com.sh.sqltoweb.dto.DBInfoDto;
 import org.springframework.stereotype.Service;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 
 @Service
@@ -11,7 +13,6 @@ public class DBInfoService {
 
 
     public String dbInfo(DBInfoDto dbInfoDto){
-
         String connStr = dbInfoDto.getConnString();
         String dbName = dbInfoDto.getDbName();
         String query = String.format("SELECT table_name, column_name, data_type, is_nullable, column_key, column_default, extra " +
@@ -31,10 +32,25 @@ public class DBInfoService {
                     }
                     result.append("\n");
                 }
+                saveResultToFile(result.toString(), "TestFile.txt");
                 connection.close();
                 return result.toString();
         } catch (SQLException e) {
             return "Query Failed: " + e.getMessage();
+        }
+    }
+
+
+    private void saveResultToFile(String data, String fileName){
+        try {
+            FileWriter fileWrite = new FileWriter(fileName);
+            fileWrite.write(data);
+            fileWrite.close();
+
+            System.out.println("Successfully saved to file : " + fileName);
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving to file: " + e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 }
